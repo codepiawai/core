@@ -1,7 +1,9 @@
 
 var profile={
 model:{
-host:'http://localhost/donat/api/lms/index.php',
+// host:'http://localhost/donat/api/lms/index.php',
+host:'https://api.piawai.id/master/profile.php',
+
 table:{id:'profile',data:[
 {id:1,induk:0,nama:"admin",email:'sa',pin:"123",akses:"sa"},
 {id:2,induk:0,nama:"user",email:'user',pin:"123",akses:"user"},
