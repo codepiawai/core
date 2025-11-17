@@ -80,17 +80,14 @@ background-position: center, center;
 <div id="menu" class="menu" tabindex="0" >
 <div class="logo hide"><a href="#"><i class="di-piawai"></i>Piawai</a></div>
 <ul id='leftmenu'>
-
-
-
-<li><a href="#" onClick=loadAndRun("code/dashboard.js?dashboard.controller.view(1)")> <i class="di-house"></i>Dashboard</a></li>
-<li class="item"><a href="#" onClick=loadAndRun("code/menu.js?menu.controller.view(0)")> <i class="di-menu"></i> Menu</a></li>
-<li><a href="#" onClick=loadAndRun("code/profile.js?profile.controller.view()")> <i class="di-person"></i> Profile</a></li>
+<li><a href="#" onClick="dashboard.controller.dashboard(1)"> <i class="di-house"></i>Dashboard</a></li>
+<li class="item"><a href="#" onClick="menu.controller.menu(0)"> <i class="di-menu"></i> Menu</a></li>
+<li><a href="#" onClick="profile.controller.profile()"> <i class="di-person"></i> Profile</a></li>
 </ul>
-
-
 </div>
+
 <div id="main" class="main login" style="min-height: 400px;" >
+
 <div id="header" class="header" ></div>
 <div id="content" class="content" ></div>
 
@@ -111,75 +108,65 @@ Made with <svg class="svgicon" >
 <script type="text/javascript" src="code/donat.js"></script>
 <script type="text/javascript" src="code/svg.js"></script>
 <script type="text/javascript" src="code/avatar.js"></script>
+<!-- <script type="text/javascript" src="app/users.js"></script> -->
 
-<script>
-  const loadedScripts = {};
-  function loadScriptOnce(src, onLoaded) {
-    if (loadedScripts[src]) {
-      log("Script sudah pernah dimuat: " + src);
-      if (typeof onLoaded === "function") onLoaded();
-      return;
-    }
 
-    const existing = document.querySelector('script[src="' + src + '"]');
-    if (existing) {
-      log("Script sudah ada di DOM: " + src);
-      loadedScripts[src] = true;
-      if (typeof onLoaded === "function") onLoaded();
-      return;
-    }
+<script type="text/javascript" src="app/config.js"></script>
+<script type="text/javascript" src="app/dashboard.js"></script>
+<script type="text/javascript" src="app/login.js"></script>
+<script type="text/javascript" src="app/menu.js"></script>
+<script type="text/javascript" src="app/profile.js"></script>
 
-    const script = document.createElement("script");
-    script.src = src;
-    script.async = true;
 
-    script.onload = function () {
-      loadedScripts[src] = true;
-      log("Script berhasil dimuat: " + src);
-      if (typeof onLoaded === "function") onLoaded();
-    };
+<script type="text/javascript" src="app/master/akses.js"></script>
+<script type="text/javascript" src="app/master/dashboards.js"></script>
+<script type="text/javascript" src="app/master/menu.js"></script>
+<script type="text/javascript" src="app/master/param.js"></script>
+<script type="text/javascript" src="app/master/pesan.js"></script>
+<script type="text/javascript" src="app/master/setting.js"></script>
+<script type="text/javascript" src="app/master/users.js"></script>
 
-    script.onerror = function () { log("Gagal memuat script: " + src); };
+<script type="text/javascript" src="app/lms/guru.js"></script>
+<script type="text/javascript" src="app/lms/modul.js"></script>
+<script type="text/javascript" src="app/lms/peserta.js"></script>
 
-    document.head.appendChild(script);
-    log("Mulai memuat script: " + src);
-  }
+<script type="text/javascript" src="app/learn/kuis.js"></script>
+<script type="text/javascript" src="app/learn/kursus.js"></script>
+<script type="text/javascript" src="app/learn/materi.js"></script>
+<script type="text/javascript" src="app/learn/mp4.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+<script type="text/javascript" src="app/learn/pdf.js"></script>
+<script type="text/javascript" src="app/learn/sertifikat.js"></script>
 
-  function loadAndRun(path) {
-    const [src, call] = path.split("?");
-    if (!call) { log("Tidak ada ekspresi fungsi di path: " + path);  return; }
 
-    const open = call.indexOf("(");
-    const close = call.lastIndexOf(")");
+<script type="text/javascript">
 
-    if (open === -1 || close === -1 || close < open) {
-      log("Format fungsi tidak valid: " + call);
-      return;
-    }
+// d.setcss('--pColor-h', '213');
+// d.setcss('--pColor-s', '100%');
+// d.setcss('--pColor-l', '22.5%');
 
-    const fnPath = call.slice(0, open).trim();
-    const rawArgs = call.slice(open + 1, close);
+svg.di();
+// d.api.host="https://api.donat.id/ukm/database.php";
+// d.api.host="http://localhost/donat/api.php";
 
-    let args = [];
-    if (rawArgs.trim().length > 0) {
-      try {args = eval("[" + rawArgs + "]"); }
-      catch (e) { log("Gagal parse parameter: " + rawArgs); return; }
-    }
+// login.controller.login();
 
-    loadScriptOnce(src, function () {
-      const fn = fnPath.split(".").reduce((obj, key) => obj && obj[key], window);
-      if (typeof fn === "function") {
-        log("Menjalankan " + fnPath + "(" + args.join(", ") + ") dari " + src);
-        fn.apply(null, args);
-      }
-      else { log("Fungsi " + fnPath + " tidak ditemukan di " + src); }
-    });
-  }
+// log(data)
 
-  window.addEventListener("DOMContentLoaded", function () {
-    log("Halaman siap (DOMContentLoaded).");
-  });
+// avatar.controller.man();
+// avatar.controller.woman();
+// avatar.controller.me('avt',2);
+
+function getUrlParam(name) {
+const params = new URLSearchParams(window.location.search);
+return params.has(name) ? params.get(name) : null;
+}
+
+
+const u = getUrlParam("u");
+if (u) { console.log("Ada parameter u:", u);}
+else { console.log("Tidak ada parameter u");}
+
 </script>
-
 </body>
 </html>

@@ -80,17 +80,15 @@ background-position: center, center;
 <div id="menu" class="menu" tabindex="0" >
 <div class="logo hide"><a href="#"><i class="di-piawai"></i>Piawai</a></div>
 <ul id='leftmenu'>
+<li><a href="#" onClick="dashboard.controller.view(1)"> <i class="di-house"></i>Dashboard</a></li>
+<li class="item"><a href="#" onClick="menu.controller.view(0)"> <i class="di-menu"></i> Menu</a></li>
+<li><a href="#" onClick="profile.controller.view()"> <i class="di-person"></i> Profile</a></li>
 
-
-
-<li><a href="#" onClick=loadAndRun("code/dashboard.js?dashboard.controller.view(1)")> <i class="di-house"></i>Dashboard</a></li>
-<li class="item"><a href="#" onClick=loadAndRun("code/menu.js?menu.controller.view(0)")> <i class="di-menu"></i> Menu</a></li>
-<li><a href="#" onClick=loadAndRun("code/profile.js?profile.controller.view()")> <i class="di-person"></i> Profile</a></li>
 </ul>
-
-
 </div>
+
 <div id="main" class="main login" style="min-height: 400px;" >
+
 <div id="header" class="header" ></div>
 <div id="content" class="content" ></div>
 
@@ -112,12 +110,26 @@ Made with <svg class="svgicon" >
 <script type="text/javascript" src="code/svg.js"></script>
 <script type="text/javascript" src="code/avatar.js"></script>
 
+
 <script>
-  const loadedScripts = {};
+
+
+const scriptList = [
+  "code/donat.js",
+  "code/svg.js",
+  "code/avatar.js",
+  "code/login.js",
+  "code/dashboard.js",
+  "code/menu.js",
+  "code/profile.js",
+];
+
+  const loadedScripts = Object.create(null);
+
   function loadScriptOnce(src, onLoaded) {
     if (loadedScripts[src]) {
       log("Script sudah pernah dimuat: " + src);
-      if (typeof onLoaded === "function") onLoaded();
+      if (typeof onLoaded === "function") {  onLoaded(); }
       return;
     }
 
@@ -125,7 +137,7 @@ Made with <svg class="svgicon" >
     if (existing) {
       log("Script sudah ada di DOM: " + src);
       loadedScripts[src] = true;
-      if (typeof onLoaded === "function") onLoaded();
+      if (typeof onLoaded === "function") { onLoaded(); }
       return;
     }
 
@@ -136,50 +148,104 @@ Made with <svg class="svgicon" >
     script.onload = function () {
       loadedScripts[src] = true;
       log("Script berhasil dimuat: " + src);
-      if (typeof onLoaded === "function") onLoaded();
+      if (typeof onLoaded === "function") {
+        onLoaded();
+      }
     };
 
-    script.onerror = function () { log("Gagal memuat script: " + src); };
+    script.onerror = function () {log("Gagal memuat script: " + src); };
 
     document.head.appendChild(script);
     log("Mulai memuat script: " + src);
   }
 
-  function loadAndRun(path) {
-    const [src, call] = path.split("?");
-    if (!call) { log("Tidak ada ekspresi fungsi di path: " + path);  return; }
 
-    const open = call.indexOf("(");
-    const close = call.lastIndexOf(")");
-
-    if (open === -1 || close === -1 || close < open) {
-      log("Format fungsi tidak valid: " + call);
+  function loadScripts(list, allDone) {
+    if (!list || list.length === 0) {
+      if (typeof allDone === "function") allDone();
       return;
     }
 
-    const fnPath = call.slice(0, open).trim();
-    const rawArgs = call.slice(open + 1, close);
+    let remaining = list.length;
 
-    let args = [];
-    if (rawArgs.trim().length > 0) {
-      try {args = eval("[" + rawArgs + "]"); }
-      catch (e) { log("Gagal parse parameter: " + rawArgs); return; }
-    }
-
-    loadScriptOnce(src, function () {
-      const fn = fnPath.split(".").reduce((obj, key) => obj && obj[key], window);
-      if (typeof fn === "function") {
-        log("Menjalankan " + fnPath + "(" + args.join(", ") + ") dari " + src);
-        fn.apply(null, args);
-      }
-      else { log("Fungsi " + fnPath + " tidak ditemukan di " + src); }
+    list.forEach(function (src) {
+      loadScriptOnce(src, function () {
+        remaining--;
+        if (remaining === 0 && typeof allDone === "function") {
+          allDone();
+        }
+      });
     });
   }
 
+  // Saat halaman siap, muat semua script, lalu jalankan fungsi inisialisasi
   window.addEventListener("DOMContentLoaded", function () {
     log("Halaman siap (DOMContentLoaded).");
+
+    loadScripts(scriptList, function () { log("Semua script di scriptList selesai dimuat."); });
   });
 </script>
 
+
+<script type="text/javascript">
+
+// d.setcss('--pColor-h', '213');
+// d.setcss('--pColor-s', '100%');
+// d.setcss('--pColor-l', '22.5%');
+
+svg.di();
+// d.api.host="https://api.donat.id/ukm/database.php";
+// d.api.host="http://localhost/donat/api.php";
+
+// login.controller.login();
+
+// log(data)
+
+// avatar.controller.man();
+// avatar.controller.woman();
+// avatar.controller.me('avt',2);
+
+function getUrlParam(name) {
+const params = new URLSearchParams(window.location.search);
+return params.has(name) ? params.get(name) : null;
+}
+
+
+const u = getUrlParam("u");
+if (u) { console.log("Ada parameter u:", u);}
+else { console.log("Tidak ada parameter u");}
+
+
+function toggleMenu(buttonElement) {
+    // Cari elemen menu terdekat (yang merupakan sibling dari button)
+    const menu = buttonElement.nextElementSibling;
+
+    // Periksa apakah menu ini sudah terlihat
+    const isVisible = menu.classList.contains('active');
+
+    // Tutup semua menu yang sedang terbuka terlebih dahulu (UX terbaik)
+    document.querySelectorAll('.kebab-menu.active').forEach(openMenu => {
+        openMenu.classList.remove('active');
+    });
+
+    // Jika menu belum terlihat, tampilkan.
+    if (!isVisible) {
+        menu.classList.add('active');
+    }
+}
+
+// Tambahkan event listener untuk menutup menu jika mengklik di luar
+document.addEventListener('click', function(event) {
+    const isKebab = event.target.closest('.kebab-container');
+
+    // Jika klik tidak berada di dalam area kebab, tutup semua menu
+    if (!isKebab) {
+        document.querySelectorAll('.kebab-menu.active').forEach(openMenu => {
+            openMenu.classList.remove('active');
+        });
+    }
+});
+
+</script>
 </body>
 </html>

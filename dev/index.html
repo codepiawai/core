@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dynamic JS Loader Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 20px;
+    }
+    button {
+      margin: 4px;
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+    #log {
+      margin-top: 16px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background: #f7f7f7;
+      min-height: 80px;
+      white-space: pre-wrap;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <h1>Dynamic JS Loader (tanpa reload HTML)</h1>
+
+  <p>
+    Klik tombol di bawah untuk <strong>load</strong> file JS secara dinamis dan
+    langsung menjalankan method-nya.
+  </p>
+
+  <button id="btnSatu">Load satu.js &amp; jalankan fsatu()</button>
+  <button id="btnDua">Load dua.js &amp; jalankan fdua()</button>
+
+  <div id="log"></div>
+
+  <script>
+    // Menyimpan status script yang sudah diload
+    const loadedScripts = {};
+
+    // Helper untuk log ke <div id="log"> dan ke console
+    function addLog(msg) {
+      console.log(msg);
+      const logDiv = document.getElementById("log");
+      logDiv.textContent += msg + "\n";
+    }
+
+    /**
+     * 8. Method di file utama untuk load JS secara dinamis.
+     *
+     * Fitur:
+     * - Periksa apakah script dengan src yang sama sudah ada.
+     * - Jika sudah ada => tidak perlu load lagi, langsung jalankan callback.
+     * - Jika belum, buat <script> baru dan append ke <head> (tanpa re-render HTML).
+     * - Saat load selesai, jalankan callback (misal: langsung panggil fungsi di dalam JS itu).
+     */
+    function loadScriptOnce(src, onLoaded) {
+      // 1. periksa jika sudah ada, tidak perlu load ulang
+      if (loadedScripts[src]) {
+        addLog("Script sudah pernah dimuat: " + src);
+        if (typeof onLoaded === "function") {
+          onLoaded();
+        }
+        return;
+      }
+
+      // Cari di DOM kalau-kalau sudah ada tag <script src="...">
+      const existing = document.querySelector('script[src="' + src + '"]');
+      if (existing) {
+        addLog("Script sudah ada di DOM: " + src);
+        loadedScripts[src] = true;
+        if (typeof onLoaded === "function") {
+          onLoaded();
+        }
+        return;
+      }
+
+      // 3. load js secara dinamis tanpa merender ulang HTML
+      const script = document.createElement("script");
+      script.src = src;
+      script.async = true;
+
+      script.onload = function () {
+        loadedScripts[src] = true;
+        addLog("Script berhasil dimuat: " + src);
+
+        // 2. saat js load penuh, langsung menjalankan method (via callback)
+        if (typeof onLoaded === "function") {
+          onLoaded();
+        }
+      };
+
+      script.onerror = function () {
+        addLog("Gagal memuat script: " + src);
+      };
+
+      document.head.appendChild(script);
+      addLog("Mulai memuat script: " + src);
+    }
+
+    /**
+     * Helper untuk pattern: "namaFile.js/namaFungsi"
+     * misal: "satu.js/fsatu" atau "dua.js/fdua"
+     */
+    function loadAndRun(path) {
+      const [src, fnName] = path.split("/");
+      loadScriptOnce(src, function () {
+        const fn = window[fnName];
+        if (typeof fn === "function") {
+          addLog("Menjalankan " + fnName + "() dari " + src);
+          fn(); // panggil fungsi dari file JS
+        } else {
+          addLog("Fungsi " + fnName + " tidak ditemukan di " + src);
+        }
+      });
+    }
+
+    // 6. event klik: load satu.js dan menjalankan fsatu()
+    document.getElementById("btnSatu").addEventListener("click", function () {
+      loadAndRun("satu.js/fsatu");
+    });
+
+    // 7. event klik: load dua.js dan menjalankan fdua()
+    document.getElementById("btnDua").addEventListener("click", function () {
+      loadAndRun("dua.js/fdua");
+    });
+
+    // Contoh: auto load salah satu JS saat halaman siap (opsional)
+    // agar terlihat poin (2): saat JS selesai load, langsung jalan method.
+    window.addEventListener("DOMContentLoaded", function () {
+      addLog("Halaman siap (DOMContentLoaded).");
+      // Misal langsung load satu.js & panggil fsatu() sekali di awal:
+      // loadAndRun("satu.js/fsatu");
+    });
+  </script>
+</body>
+</html>
