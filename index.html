@@ -177,8 +177,70 @@ Made with <svg class="svgicon" >
   }
 
   window.addEventListener("DOMContentLoaded", function () {
-    log("Halaman siap (DOMContentLoaded).");
+    // log("Halaman siap (DOMContentLoaded).");
   });
+</script>
+
+
+<script type="text/javascript">
+
+// d.setcss('--pColor-h', '213');
+// d.setcss('--pColor-s', '100%');
+// d.setcss('--pColor-l', '22.5%');
+
+svg.di();
+// d.api.host="https://api.donat.id/ukm/database.php";
+// d.api.host="http://localhost/donat/api.php";
+
+// login.controller.login();
+
+// log(data)
+
+// avatar.controller.man();
+// avatar.controller.woman();
+// avatar.controller.me('avt',2);
+
+function getUrlParam(name) {
+const params = new URLSearchParams(window.location.search);
+return params.has(name) ? params.get(name) : null;
+}
+
+
+const u = getUrlParam("u");
+if (u) { console.log("Ada parameter u:", u);}
+else { console.log("Tidak ada parameter u");}
+
+
+function toggleMenu(buttonElement) {
+    // Cari elemen menu terdekat (yang merupakan sibling dari button)
+    const menu = buttonElement.nextElementSibling;
+
+    // Periksa apakah menu ini sudah terlihat
+    const isVisible = menu.classList.contains('active');
+
+    // Tutup semua menu yang sedang terbuka terlebih dahulu (UX terbaik)
+    document.querySelectorAll('.kebab-menu.active').forEach(openMenu => {
+        openMenu.classList.remove('active');
+    });
+
+    // Jika menu belum terlihat, tampilkan.
+    if (!isVisible) {
+        menu.classList.add('active');
+    }
+}
+
+// Tambahkan event listener untuk menutup menu jika mengklik di luar
+document.addEventListener('click', function(event) {
+    const isKebab = event.target.closest('.kebab-container');
+
+    // Jika klik tidak berada di dalam area kebab, tutup semua menu
+    if (!isKebab) {
+        document.querySelectorAll('.kebab-menu.active').forEach(openMenu => {
+            openMenu.classList.remove('active');
+        });
+    }
+});
+
 </script>
 
 </body>
