@@ -1,7 +1,8 @@
 var login={
 model:{
   // host:'http://localhost/donat/api/master/index.php',
-  host:'http://localhost/donat/api/master/login.php',
+//  host:'http://localhost/donat/api/master/login.php',
+  host:'https://api.piawai.id/master/login.php',
 
 data:{email:'sa',pin:'123'},
 
