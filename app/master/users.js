@@ -1,6 +1,8 @@
 var users={
 model:{
-  host:'http://localhost/donat/api/master/users.php',
+  // host:'http://localhost/donat/api/master/users.php',
+  host:'https://api.piawai.id/master/users.php',
+
 table:{id:'users',data:[
   {id:1,nama:"user1",isi:1},
   {id:2,nama:"user2",isi:2},

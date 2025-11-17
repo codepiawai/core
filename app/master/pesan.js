@@ -1,6 +1,8 @@
 var pesan={
 model:{
-  host:'http://localhost/donat/api/master/pesan.php',
+  // host:'http://localhost/donat/api/master/pesan.php',
+  host:'https://api.piawai.id/master/pesan.php',
+
 table:{id:'pesan',data:[
   {id:1,nama:"pesan1",isi:1},
   {id:2,nama:"pesan2",isi:2},

@@ -1,6 +1,8 @@
 var menus={
 model:{
-host:'http://localhost/donat/api/master/menu.php',
+  // host:'http://localhost/donat/api/master/menu.php',
+  host:'https://api.piawai.id/master/menu.php',
+
 table:{id:'menus',data:[
   {id:1,nama:"menu1",isi:1},
   {id:2,nama:"menu2",isi:2},

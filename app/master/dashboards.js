@@ -1,6 +1,8 @@
 var dashboards={
 model:{
-  host:'http://localhost/donat/api/master/dashboard.php',
+  // host:'http://localhost/donat/api/master/dashboard.php',
+  host:'https://api.piawai.id/master/dashboard.php',
+
 table:{id:'dashboards',data:[
   {id:1,nama:"dashboard1s",isi:1},
   {id:2,nama:"dashboard2s",isi:2},

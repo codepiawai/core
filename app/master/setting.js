@@ -1,6 +1,8 @@
 var setting={
 model:{
-  host:'http://localhost/donat/api/master/setting.php',
+  // host:'http://localhost/donat/api/master/setting.php',
+  host:'https://api.piawai.id/master/setting.php',
+
 table:{id:'setting',data:[
   {id:1,nama:"setting1",isi:1},
   {id:2,nama:"setting2",isi:2},

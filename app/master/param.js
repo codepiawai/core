@@ -1,6 +1,8 @@
 var params={
 model:{
-  host:'http://localhost/donat/api/master/param.php',
+  // host:'http://localhost/donat/api/master/param.php',
+  host:'https://api.piawai.id/master/param.php',
+
 table:{id:'params',data:[
   {id:1,nama:"param1",isi:1},
   {id:2,nama:"param2",isi:2},

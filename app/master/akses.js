@@ -1,6 +1,7 @@
 var akses={
 model:{
-host:'http://localhost/donat/api/master/akses.php',
+  // host:'http://localhost/donat/api/master/akses.php',
+  host:'https://api.piawai.id/master/akses.php',
 table:{id:'akses',data:[
   {id:1,nama:"akses1",isi:1},
   {id:2,nama:"akses2",isi:2},
