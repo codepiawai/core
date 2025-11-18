@@ -207,7 +207,8 @@ out=`<div class="${css.search}">
         </button>
 
         <div class="kebab-menu">
-            <a href="#" class="menu-item">Download</a>
+        <a href="#" class="menu-item">Print</a>
+        <a href="#" class="menu-item">Download</a>
             <a href="#" class="menu-item">Upload</a>
             <a href="#" class="menu-item delete-action">Delete</a>
         </div>
@@ -215,6 +216,11 @@ out=`<div class="${css.search}">
 </div>
 <div id="table" class="gTable">${this.table(arr)}</div>
 <div id="paging" class="gpaging">${this.paging(arr)}</div>
+
+<a href="#tambah-data" class="floating-button" aria-label="Tambah Baru">
+    <span class="button-icon">+</span>
+</a>
+
 `;
 return out;
 },
@@ -427,10 +433,10 @@ return out;
 },
 
 view:function(arr){
+  // <div class="row"> ${this.button(arr.button)} </div>
 out=`<div class="row shadow">
 <div class="row modalbar header"><span class="kiri" >${modul}</span></div>
 
-<div class="row"> ${this.button(arr.button)} </div>
 <div class="row"> ${this.datatable(arr.datatable)} </div>
 <div id="ext"></div>
 </div>`;
