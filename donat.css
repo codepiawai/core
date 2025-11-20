@@ -37,6 +37,46 @@
 }
 
 
+.floating-button {
+    /* Posisi */
+    position: fixed; /* Membuat tombol selalu di posisi yang sama saat di-scroll */
+    bottom: 20px; /* Jarak dari bawah layar */
+    right: 20px; /* Jarak dari kanan layar */
+    z-index: 1000; /* Memastikan tombol berada di atas elemen lain */
+
+    /* Bentuk dan Ukuran */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px; /* Lebar tombol */
+    height: 60px; /* Tinggi tombol */
+    border-radius: 50%; /* Membuat bentuk lingkaran */
+
+    /* Tampilan Visual */
+    background-color: #28a745; /* Warna hijau, lebih sesuai untuk "Add" */
+    color: white;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Efek bayangan */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Styling untuk Ikon */
+.button-icon {
+    font-size: 30px; /* Ukuran ikon '+' */
+    font-weight: 300; /* Berat huruf lebih tipis */
+    line-height: 1;
+}
+
+/* Efek Hover dan Active */
+.floating-button:hover {
+    background-color: #1e7e34;
+    transform: scale(1.05);
+}
+
+.floating-button:active {
+    transform: scale(0.95);
+}
+
 @keyframes slideInLeft { 0% { transform: translateX(-100%); } 100% {transform: translateX(0); }}
 * { box-sizing: border-box; }
 body{margin: 0;
@@ -65,6 +105,7 @@ letter-spacing: 0.5px;
 @media screen and (max-width: 450px) {
   [class*='col-'] { width: 100%; }
   .card { width: 50%; }
+  .floating-button {bottom: 80px; }
   /* .col-1-1 { width: 100%;   } */
 
 }
@@ -141,11 +182,31 @@ overflow: auto;
 }
 
 
-
-.gPaging { display: table;}
+/* .gPaging { display: table;}
 .gPaging span { display:table-cell; vertical-align:middle; padding:8px;}
+.gButton { display: flex; flex-wrap: wrap; flex-direction: row;} */
 
-.gButton { display: flex; flex-wrap: wrap; flex-direction: row;}
+
+.gPaging {
+    display: flex;
+    /* justify-content: center;  */
+    /* atau space-between / flex-end sesuai kebutuhan */
+    /* align-items: center; */
+    gap: 10px;
+    padding: 10px 0;
+}
+
+.gPaging button {
+    margin: 0;       /* hilangkan margin bawaan */
+}
+
+.gPaging span {
+    white-space: nowrap; /* agar tidak turun baris */
+}
+
+
+
+
 .button, button {
 color:white;
 background:var(--pColor);
